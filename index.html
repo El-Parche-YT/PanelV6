@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descarga Panel Free Fire - El Parche YT</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: #050505;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    padding: 20px 0;
+}
+
+#matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.main-wrapper {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.glass-panel {
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid #ff1e27;
+    border-radius: 24px;
+    padding: 35px 25px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-panel::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(transparent, transparent, transparent, #ff1e27);
+    animation: rotate 6s linear infinite;
+    z-index: -1;
+    opacity: 0.1;
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    background: linear-gradient(to bottom, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h1 span { color: #ff1e27; -webkit-text-fill-color: #ff1e27; text-shadow: 0 0 15px rgba(255,30,39,0.5); }
+
+.thumb-wrapper {
+    position: relative;
+    margin-bottom: 30px;
+    border-radius: 15px;
+    padding: 5px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    min-height: 180px;
+    background: #111;
+}
+
+.thumb-wrapper img {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+    filter: brightness(0.8) contrast(1.1);
+    transition: 0.5s;
+}
+
+.btn-primary {
+    background: #ff1e27;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    border: none;
+    width: 100%;
+    padding: 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 20px rgba(255, 30, 39, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(255, 30, 39, 0.5);
+    background: #ff353d;
+}
+
+.mission-box { display: none; margin-top: 10px; }
+
+.step-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: 0.3s;
+    text-align: left;
+}
+
+.step-item.locked { opacity: 0.4; filter: grayscale(1); pointer-events: none; }
+
+.step-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.step-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #888; letter-spacing: 1px; }
+.step-status { font-size: 0.7rem; color: #ff1e27; font-weight: 700; }
+
+.action-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.3s;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+}
+
+.btn-yt { background: #ff0000; color: #fff; }
+.btn-yt:hover { background: #cc0000; }
+.btn-like { background: #1a73e8; color: #fff; }
+.btn-like:hover { background: #1557b0; }
+
+.loader-container {
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    margin-top: 15px;
+    display: none;
+    overflow: hidden;
+}
+.loader-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff1e27, #ffcc00);
+    box-shadow: 0 0 10px #ff1e27;
+}
+
+.download-area {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(0, 255, 102, 0.05);
+    border: 1px dashed #00ff66;
+    border-radius: 16px;
+    animation: slideUp 0.5s ease-out;
+}
+
+.btn-final {
+    background: #00ff66;
+    color: #000;
+    font-family: 'Orbitron', sans-serif;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    padding: 18px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.1rem;
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+    transition: 0.3s;
+}
+
+.btn-final:hover { transform: scale(1.02); box-shadow: 0 0 35px rgba(0, 255, 102, 0.6); }
+
+.shop-section {
+    margin-top: 25px;
+    animation: fadeIn 1.2s ease-out;
+    text-align: center;
+    background: rgba(255, 152, 0, 0.05);
+    padding: 15px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 152, 0, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+.btn-shop {
+    background: linear-gradient(45deg, #ff9800, #f57c00);
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 0;
+    transition: 0.3s;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(255, 152, 0, 0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.btn-shop:hover { transform: translateY(-2px); background: #f57c00; box-shadow: 0 15px 30px rgba(255, 152, 0, 0.4); }
+
+/* Animación de Salto y Brillo */
+@keyframes jump-glow {
+    0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+    50% { transform: translateY(-8px) scale(1.02); filter: brightness(1.4); }
+}
+.btn-animate { animation: jump-glow 1.5s infinite ease-in-out; }
+
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Ajustes Responsivos */
+@media (max-width: 480px) {
+    .glass-panel { padding: 25px 15px; border-radius: 16px; }
+    h1 { font-size: 1.3rem; }
+    .step-item { padding: 15px; }
+    .action-btn { font-size: 0.9rem; padding: 12px; }
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+
+<div class="main-wrapper">
+    <div class="glass-panel">
+        <h1>Elite <span>Panel V2</span></h1>
+
+        <div class="thumb-wrapper">
+            <img id="main-thumb" src="miniatura1.jpeg" alt="Miniatura del Panel">
+        </div>
+
+        <script src="https://pl28488770.effectivecpmnetwork.com/5b/16/f5/5b16f592723d84c5393f83423791f33d.js"></script>
+        <button class="btn-primary" id="btn-start" onclick="activarMisiones()">Iniciar Desbloqueo</button>
+
+        <div class="mission-box" id="locker">
+            <div class="step-item" id="step1">
+                <div class="step-header">
+                    <span class="step-title">Misión 01</span>
+                    <span id="st-1" class="step-status">PENDIENTE</span>
+                </div>
+                <button id="btn-sub" class="action-btn btn-yt btn-animate" onclick="doStep1()">
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                    Suscribirse al Canal
+                </button>
+                <div class="loader-container" id="load1"><div class="loader-fill" id="fill1"></div></div>
+            </div>
+
+            <div class="step-item locked" id="step2">
+                <div class="step-header">
+                    <span class="step-title">Misión 02</span>
+                    <span id="st-2" class="step-status">BLOQUEADO</span>
+                </div>
+                <button id="btn-like" class="action-btn btn-like" onclick="doStep2()">
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    Dar Like al Video
+                </button>
+                <div class="loader-container" id="load2"><div class="loader-fill" id="fill2"></div></div>
+            </div>
+
+            <div class="download-area" id="finish">
+                <script src="https://pl28488770.effectivecpmnetwork.com/5b/16/f5/5b16f592723d84c5393f83423791f33d.js"></script>
+                <button onclick="abrirPasoFinal(event)" class="btn-final">OBTENER PANEL AHORA</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="shop-section">
+        <p style="color: #ff9800; font-weight: 700; margin-bottom: 10px; font-size: 0.9rem; letter-spacing: 1px;">¿QUIERES MÁS JUEGOS?</p>
+        <a href="https://el-parche-yt.github.io/TiendaGratis/" target="_blank" class="btn-shop">🎮 Visitar Tienda Gratis 🎮</a>
+    </div>
+</div>
+
+<script>
+const CANAL_URL="https://youtube.com/@el_parche_yt?si=kKnFRex675DEZjJD";
+const VIDEO_URL = "https://youtu.be/dwh2LJNwnyk?si=tmls3PIhN7k4khXZ";
+
+// Sonidos
+const sndClick = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+const sndSuccess = new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3');
+
+// Efecto Matrix
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeMatrix() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resizeMatrix);
+resizeMatrix();
+
+const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+const drops = Array(Math.floor(columns)).fill(1);
+
+function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#ff1e27'; // Color rojo para el hacker style de FF
+    ctx.font = fontSize + 'px monospace';
+
+    for (let i = 0; i < drops.length; i++) {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+    }
+}
+setInterval(drawMatrix, 35);
+
+function activarMisiones(){
+    sndClick.play();
+    document.getElementById('btn-start').style.display='none';
+    document.getElementById('locker').style.display='block';
+}
+
+function doStep1(){
+    sndClick.play();
+    window.open(CANAL_URL,'_blank');
+    document.getElementById('btn-sub').style.display='none';
+    document.getElementById('load1').style.display='block';
+    let p = 0;
+    const i = setInterval(() => {
+        p++; document.getElementById('fill1').style.width = p+'%';
+        if(p>=100){
+            clearInterval(i);
+            sndSuccess.play();
+            document.getElementById('st-1').innerText = 'COMPLETADO';
+            document.getElementById('st-1').style.color = '#00ff66';
+            document.getElementById('step2').classList.remove('locked');
+            document.getElementById('st-2').innerText = 'DISPONIBLE';
+            document.getElementById('st-2').style.color = '#ffcc00';
+            document.getElementById('btn-like').classList.add('btn-animate');
+        }
+    }, 40);
+}
+
+function doStep2(){
+    sndClick.play();
+    window.open(VIDEO_URL,'_blank');
+    document.getElementById('btn-like').style.display='none';
+    document.getElementById('load2').style.display='block';
+    let p = 0;
+    const i = setInterval(() => {
+        p++; document.getElementById('fill2').style.width = p+'%';
+        if(p>=100){
+            clearInterval(i);
+            sndSuccess.play();
+            document.getElementById('st-2').innerText = 'COMPLETADO';
+            document.getElementById('st-2').style.color = '#00ff66';
+            document.getElementById('finish').style.display = 'block';
+        }
+    }, 40);
+}
+
+function abrirPasoFinal(event) {
+    event.preventDefault();
+    // 1. Abre el Smartlink en una nueva pestaña
+    window.open('https://www.effectivecpmnetwork.com/udwqdtkwf?key=2439b5fa83ecf2fd05ad50db1ef80d65', '_blank');
+    
+    // 2. Redirige la pestaña actual al Linkvertise
+    window.location.href = 'https://link-center.net/3400650/Kao28XptOehy';
+}
+</script>
+<script src="https://pl28488782.effectivecpmnetwork.com/78/f7/a3/78f7a36fcf0878c51c7bcefbeb1fa58e.js"></script>
+<script async="async" data-cfasync="false" src="https://pl28503227.effectivecpmnetwork.com/ef3ee5d66850303fb9e05676f373efea/invoke.js"></script>
+<div id="container-ef3ee5d66850303fb9e05676f373efea" style="margin-top: 20px; width: 100%; display: flex; justify-content: center;"></div>
+</body>
+</html>
